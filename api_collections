@@ -1,0 +1,867 @@
+{
+    "info": {
+        "_postman_id": "ecotrackr-new-apis-collection",
+        "name": "EcoTrackr — New APIs",
+        "description": "Postman collection for **new APIs only** (not the full app).\n\n**Setup:** Import with `EcoTrackr-New-APIs.postman_environment.json`. Run **Auth → User Login** or **Admin Login** to save tokens.\n\n**Folders:** Challenges Filters, Eco Map, System Info, Redeem Rewards, Notifications, Customer Support, Streak, Privacy Policy, Terms & Conditions.",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "variable": [
+        {
+            "key": "baseUrl",
+            "value": "http://localhost:4500/api/v1"
+        },
+        {
+            "key": "userToken",
+            "value": ""
+        },
+        {
+            "key": "adminToken",
+            "value": ""
+        },
+        {
+            "key": "userEmail",
+            "value": "user@ecotrackr.com"
+        },
+        {
+            "key": "userPassword",
+            "value": "Password1"
+        },
+        {
+            "key": "challengeId",
+            "value": ""
+        },
+        {
+            "key": "redeemRewardId",
+            "value": ""
+        },
+        {
+            "key": "notificationId",
+            "value": ""
+        },
+        {
+            "key": "supportTicketId",
+            "value": ""
+        },
+        {
+            "key": "privacyId",
+            "value": ""
+        },
+        {
+            "key": "termsId",
+            "value": ""
+        }
+    ],
+    "auth": {
+        "type": "bearer",
+        "bearer": [
+            {
+                "key": "token",
+                "value": "{{userToken}}",
+                "type": "string"
+            }
+        ]
+    },
+    "item": [
+        {
+            "name": "00 - Auth (for tokens)",
+            "item": [
+                {
+                    "name": "User Login",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "if (pm.response.code === 200) {",
+                                    "  const j = pm.response.json();",
+                                    "  if (j.data?.token) pm.collectionVariables.set('userToken', j.data.token);",
+                                    "}"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "auth": {
+                            "type": "noauth"
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"email\": \"{{userEmail}}\",\n  \"password\": \"{{userPassword}}\",\n  \"role\": \"user\",\n  \"device\": { \"id\": \"postman\", \"deviceToken\": \"\" }\n}"
+                        },
+                        "url": "{{baseUrl}}/user/login"
+                    }
+                },
+                {
+                    "name": "Admin Login",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "if (pm.response.code === 200) {",
+                                    "  const j = pm.response.json();",
+                                    "  if (j.data?.token) pm.collectionVariables.set('adminToken', j.data.token);",
+                                    "}"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "auth": {
+                            "type": "noauth"
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"email\": \"admin@ecotrackr.com\",\n  \"password\": \"AdminPass1\",\n  \"device\": { \"id\": \"postman-admin\" }\n}"
+                        },
+                        "url": "{{baseUrl}}/user/admin-login"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "01 - Challenges (Filters)",
+            "item": [
+                {
+                    "name": "List Challenges (Basic)",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "if (pm.response.code === 200) {",
+                                    "  const j = pm.response.json();",
+                                    "  const first = j.data?.challenges?.[0];",
+                                    "  if (first?._id) pm.collectionVariables.set('challengeId', first._id);",
+                                    "}"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "auth": {
+                            "type": "noauth"
+                        },
+                        "method": "GET",
+                        "url": "{{baseUrl}}/challenges?page=1&limit=20"
+                    }
+                },
+                {
+                    "name": "List Challenges (With Filters + Auth)",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{userToken}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/challenges?type=rare&difficulty=easy,medium&proofType=self_check,photo&status=available&sortBy=most_points&page=1&limit=20",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "challenges"
+                            ],
+                            "query": [
+                                {
+                                    "key": "type",
+                                    "value": "rare"
+                                },
+                                {
+                                    "key": "difficulty",
+                                    "value": "easy,medium"
+                                },
+                                {
+                                    "key": "proofType",
+                                    "value": "self_check,photo"
+                                },
+                                {
+                                    "key": "status",
+                                    "value": "available"
+                                },
+                                {
+                                    "key": "sortBy",
+                                    "value": "most_points"
+                                },
+                                {
+                                    "key": "page",
+                                    "value": "1"
+                                },
+                                {
+                                    "key": "limit",
+                                    "value": "20"
+                                }
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "02 - Eco Map",
+            "item": [
+                {
+                    "name": "Get Nearby (All)",
+                    "request": {
+                        "auth": {
+                            "type": "noauth"
+                        },
+                        "method": "GET",
+                        "url": "{{baseUrl}}/eco-map?lat=40.7484&lng=-73.9857&radius=10&type=all"
+                    }
+                },
+                {
+                    "name": "Get Nearby Stays Only",
+                    "request": {
+                        "auth": {
+                            "type": "noauth"
+                        },
+                        "method": "GET",
+                        "url": "{{baseUrl}}/eco-map?lat=40.7484&lng=-73.9857&radius=5&type=stays"
+                    }
+                },
+                {
+                    "name": "Get Nearby Challenges Only",
+                    "request": {
+                        "auth": {
+                            "type": "noauth"
+                        },
+                        "method": "GET",
+                        "url": "{{baseUrl}}/eco-map?lat=1.3521&lng=103.8198&radius=10&type=challenges&q=solar"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "03 - System Info & Leaderboard",
+            "item": [
+                {
+                    "name": "Get System Info & Top Users",
+                    "request": {
+                        "auth": {
+                            "type": "noauth"
+                        },
+                        "method": "GET",
+                        "url": "{{baseUrl}}/system-info",
+                        "description": "Returns system counts + top 10 leaderboard (`topUsers`)"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "04 - Redeem Rewards (User)",
+            "item": [
+                {
+                    "name": "List Redeem Rewards",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "if (pm.response.code === 200) {",
+                                    "  const j = pm.response.json();",
+                                    "  const first = j.data?.rewards?.find(r => r.canRedeem) || j.data?.rewards?.[0];",
+                                    "  if (first?.id) pm.collectionVariables.set('redeemRewardId', first.id);",
+                                    "}"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/redeem-rewards"
+                    }
+                },
+                {
+                    "name": "Redeem Reward",
+                    "request": {
+                        "method": "POST",
+                        "url": "{{baseUrl}}/redeem-rewards/{{redeemRewardId}}/redeem"
+                    }
+                },
+                {
+                    "name": "My Redemption History",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/redeem-rewards/my-redemptions?page=1&limit=20"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "05 - Redeem Rewards (Admin)",
+            "auth": {
+                "type": "bearer",
+                "bearer": [
+                    {
+                        "key": "token",
+                        "value": "{{adminToken}}",
+                        "type": "string"
+                    }
+                ]
+            },
+            "item": [
+                {
+                    "name": "List All Rewards",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/redeem-rewards/admin/all"
+                    }
+                },
+                {
+                    "name": "Create Reward",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "if (pm.response.code === 201) {",
+                                    "  const j = pm.response.json();",
+                                    "  if (j.data?.reward?._id) pm.collectionVariables.set('redeemRewardId', j.data.reward._id);",
+                                    "}"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"title\": \"20% Off Eco Stay\",\n  \"description\": \"Get 20% off any certified eco-hotel booking\",\n  \"points\": 500,\n  \"image\": \"https://echotracker-dev.s3.amazonaws.com/uploads/sample.jpg\",\n  \"isLocked\": false,\n  \"treesPlanted\": 0,\n  \"sortOrder\": 1,\n  \"active\": true\n}"
+                        },
+                        "url": "{{baseUrl}}/redeem-rewards"
+                    }
+                },
+                {
+                    "name": "Update Reward (Unlock/Lock)",
+                    "request": {
+                        "method": "PATCH",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"isLocked\": false,\n  \"points\": 500\n}"
+                        },
+                        "url": "{{baseUrl}}/redeem-rewards/{{redeemRewardId}}"
+                    }
+                },
+                {
+                    "name": "Delete Reward",
+                    "request": {
+                        "method": "DELETE",
+                        "url": "{{baseUrl}}/redeem-rewards/{{redeemRewardId}}"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "06 - Notifications",
+            "item": [
+                {
+                    "name": "Get Notifications (All)",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "if (pm.response.code === 200) {",
+                                    "  const j = pm.response.json();",
+                                    "  const first = j.data?.notifications?.[0];",
+                                    "  if (first?.id) pm.collectionVariables.set('notificationId', first.id);",
+                                    "}"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/notifications?type=all&page=1&limit=20"
+                    }
+                },
+                {
+                    "name": "Get Notifications (Challenges)",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/notifications?type=challenges&page=1&limit=20"
+                    }
+                },
+                {
+                    "name": "Get Notifications (Rewards)",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/notifications?type=rewards&page=1&limit=20"
+                    }
+                },
+                {
+                    "name": "Get Unread Count",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/notifications/unread-count"
+                    }
+                },
+                {
+                    "name": "Mark One as Read",
+                    "request": {
+                        "method": "PATCH",
+                        "url": "{{baseUrl}}/notifications/{{notificationId}}/read"
+                    }
+                },
+                {
+                    "name": "Mark All as Read",
+                    "request": {
+                        "method": "PATCH",
+                        "url": "{{baseUrl}}/notifications/read-all"
+                    }
+                },
+                {
+                    "name": "Delete One Notification",
+                    "request": {
+                        "method": "DELETE",
+                        "url": "{{baseUrl}}/notifications/{{notificationId}}"
+                    }
+                },
+                {
+                    "name": "Delete All Notifications",
+                    "request": {
+                        "method": "DELETE",
+                        "url": "{{baseUrl}}/notifications"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "07 - Customer Support (User)",
+            "item": [
+                {
+                    "name": "Get Support Subjects",
+                    "request": {
+                        "auth": {
+                            "type": "noauth"
+                        },
+                        "method": "GET",
+                        "url": "{{baseUrl}}/customer-support/subjects"
+                    }
+                },
+                {
+                    "name": "Submit Support Ticket",
+                    "request": {
+                        "auth": {
+                            "type": "noauth"
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"fullName\": \"Alex Green\",\n  \"email\": \"{{userEmail}}\",\n  \"subject\": \"Challenges & Rewards\",\n  \"message\": \"My challenge proof was rejected but I submitted a valid photo.\"\n}"
+                        },
+                        "url": "{{baseUrl}}/customer-support"
+                    }
+                },
+                {
+                    "name": "Submit Support Ticket (Logged In)",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"fullName\": \"Alex Green\",\n  \"email\": \"{{userEmail}}\",\n  \"subject\": \"Technical Issue\",\n  \"message\": \"App crashes when opening eco map.\"\n}"
+                        },
+                        "url": "{{baseUrl}}/customer-support"
+                    }
+                },
+                {
+                    "name": "My Support Tickets",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/customer-support/my?page=1&limit=20"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "08 - Customer Support (Admin)",
+            "auth": {
+                "type": "bearer",
+                "bearer": [
+                    {
+                        "key": "token",
+                        "value": "{{adminToken}}",
+                        "type": "string"
+                    }
+                ]
+            },
+            "item": [
+                {
+                    "name": "List All Tickets",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "if (pm.response.code === 200) {",
+                                    "  const j = pm.response.json();",
+                                    "  const first = j.data?.tickets?.[0];",
+                                    "  if (first?._id) pm.collectionVariables.set('supportTicketId', first._id);",
+                                    "}"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/customer-support/admin/all?status=pending&page=1&limit=20"
+                    }
+                },
+                {
+                    "name": "Get Ticket by ID",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/customer-support/admin/{{supportTicketId}}"
+                    }
+                },
+                {
+                    "name": "Update Ticket Status",
+                    "request": {
+                        "method": "PATCH",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"status\": \"in_progress\",\n  \"adminNote\": \"Checking with the user via email\"\n}"
+                        },
+                        "url": "{{baseUrl}}/customer-support/admin/{{supportTicketId}}"
+                    }
+                },
+                {
+                    "name": "Delete Ticket",
+                    "request": {
+                        "method": "DELETE",
+                        "url": "{{baseUrl}}/customer-support/admin/{{supportTicketId}}"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "09 - Streak Dashboard",
+            "item": [
+                {
+                    "name": "Get Streak (Full Dashboard)",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/user/streak",
+                        "description": "currentStreak, weeklyProgress, daysActive, xpFromStreak, personalBestMessage"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "10 - Privacy Policy",
+            "item": [
+                {
+                    "name": "Get Active Privacy Policy",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "if (pm.response.code === 200) {",
+                                    "  const j = pm.response.json();",
+                                    "  if (j.data?.privacy?._id) pm.collectionVariables.set('privacyId', j.data.privacy._id);",
+                                    "}"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "auth": {
+                            "type": "noauth"
+                        },
+                        "method": "GET",
+                        "url": "{{baseUrl}}/privacy"
+                    }
+                },
+                {
+                    "name": "Admin - List All",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{adminToken}}",
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "url": "{{baseUrl}}/privacy/admin/all"
+                    }
+                },
+                {
+                    "name": "Admin - Create",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "if (pm.response.code === 201) {",
+                                    "  const j = pm.response.json();",
+                                    "  if (j.data?.privacy?._id) pm.collectionVariables.set('privacyId', j.data.privacy._id);",
+                                    "}"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{adminToken}}",
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"title\": \"Privacy Policy\",\n  \"companyName\": \"EcoTrackr Inc.\",\n  \"lastUpdated\": \"2026-03-15\",\n  \"introduction\": \"This Privacy Policy describes how EcoTrackr Inc. collects, uses, and protects your information.\",\n  \"sections\": [\n    {\n      \"order\": 1,\n      \"title\": \"1. Information We Collect\",\n      \"content\": \"We collect information you provide directly to us...\"\n    },\n    {\n      \"order\": 2,\n      \"title\": \"2. How We Use Your Information\",\n      \"content\": \"We use the information we collect to provide and improve our services...\"\n    }\n  ],\n  \"active\": true\n}"
+                        },
+                        "url": "{{baseUrl}}/privacy"
+                    }
+                },
+                {
+                    "name": "Admin - Update",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{adminToken}}",
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "method": "PATCH",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"lastUpdated\": \"2026-06-18\"\n}"
+                        },
+                        "url": "{{baseUrl}}/privacy/{{privacyId}}"
+                    }
+                },
+                {
+                    "name": "Admin - Delete",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{adminToken}}",
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "method": "DELETE",
+                        "url": "{{baseUrl}}/privacy/{{privacyId}}"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "11 - Terms & Conditions",
+            "item": [
+                {
+                    "name": "Get Active Terms",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "if (pm.response.code === 200) {",
+                                    "  const j = pm.response.json();",
+                                    "  if (j.data?.terms?._id) pm.collectionVariables.set('termsId', j.data.terms._id);",
+                                    "}"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "auth": {
+                            "type": "noauth"
+                        },
+                        "method": "GET",
+                        "url": "{{baseUrl}}/termsandcondition"
+                    }
+                },
+                {
+                    "name": "Admin - List All",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{adminToken}}",
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "url": "{{baseUrl}}/termsandcondition/admin/all"
+                    }
+                },
+                {
+                    "name": "Admin - Create",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "if (pm.response.code === 201) {",
+                                    "  const j = pm.response.json();",
+                                    "  if (j.data?.terms?._id) pm.collectionVariables.set('termsId', j.data.terms._id);",
+                                    "}"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{adminToken}}",
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"title\": \"Terms & Conditions\",\n  \"companyName\": \"EcoTrackr Inc.\",\n  \"effectiveDate\": \"2026-01-01\",\n  \"introduction\": \"These Terms and Conditions govern your use of EcoTrackr operated by EcoTrackr Inc.\",\n  \"sections\": [\n    {\n      \"order\": 1,\n      \"title\": \"1. Acceptance of Terms\",\n      \"content\": \"By accessing or using EcoTrackr, you agree to be bound by these Terms...\"\n    },\n    {\n      \"order\": 2,\n      \"title\": \"2. User Accounts\",\n      \"content\": \"You must provide accurate information when creating an account...\"\n    }\n  ],\n  \"active\": true\n}"
+                        },
+                        "url": "{{baseUrl}}/termsandcondition"
+                    }
+                },
+                {
+                    "name": "Admin - Update",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{adminToken}}",
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "method": "PATCH",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"effectiveDate\": \"2026-06-18\"\n}"
+                        },
+                        "url": "{{baseUrl}}/termsandcondition/{{termsId}}"
+                    }
+                },
+                {
+                    "name": "Admin - Delete",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{adminToken}}",
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "method": "DELETE",
+                        "url": "{{baseUrl}}/termsandcondition/{{termsId}}"
+                    }
+                }
+            ]
+        }
+    ]
+}

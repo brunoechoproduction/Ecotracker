@@ -1,0 +1,70 @@
+{
+  "cli": {
+    "version": ">= 18.9.1",
+    "appVersionSource": "remote"
+  },
+  "build": {
+    "development": {
+      "developmentClient": true,
+      "distribution": "internal",
+      "android": {
+        "buildType": "apk"
+      },
+      "ios": {
+        "simulator": false
+      },
+      "env": {
+        "EXPO_PUBLIC_API_URL": "https://main.d1s6ddufwl8qkb.amplifyapp.com",
+        "EXPO_PUBLIC_ADMOB_TEST_MODE": "true",
+        "EXPO_PUBLIC_ADMOB_ANDROID_APP_ID": "ca-app-pub-7914769443576357~5076957034",
+        "EXPO_PUBLIC_ADMOB_ANDROID_BANNER": "ca-app-pub-7914769443576357/5250437189",
+        "EXPO_PUBLIC_ADMOB_ANDROID_INTERSTITIAL": "ca-app-pub-7914769443576357/1119620487",
+        "EXPO_PUBLIC_ADMOB_IOS_APP_ID": "ca-app-pub-7914769443576357~2670551476",
+        "EXPO_PUBLIC_ADMOB_IOS_BANNER": "ca-app-pub-7914769443576357/2638495956",
+        "EXPO_PUBLIC_ADMOB_IOS_INTERSTITIAL": "ca-app-pub-7914769443576357/7521377304",
+        "GOOGLE_MAP_API_KEY": "AIzaSyBOq3EO_1wKdV4nnULrkPo6V-t-QkuT4P0",
+        "GOOGLE_MAP_API_KEY_IOS": "AIzaSyCfQzt_oUOcgLamzpPSrGRILECUtN9GZ4Y",
+        "EXPO_PUBLIC_DEV_EMAIL": "umer@yopmail.com",
+        "EXPO_PUBLIC_DEV_PASSWORD": "User@1234"
+      }
+    },
+    "preview": {
+      "distribution": "internal",
+      "android": {
+        "buildType": "apk"
+      },
+      "env": {
+        "EXPO_PUBLIC_API_URL": "https://main.d1s6ddufwl8qkb.amplifyapp.com",
+        "EXPO_PUBLIC_ADMOB_TEST_MODE": "true",
+        "EXPO_PUBLIC_ADMOB_ANDROID_APP_ID": "ca-app-pub-7914769443576357~5076957034",
+        "EXPO_PUBLIC_ADMOB_ANDROID_BANNER": "ca-app-pub-7914769443576357/5250437189",
+        "EXPO_PUBLIC_ADMOB_ANDROID_INTERSTITIAL": "ca-app-pub-7914769443576357/1119620487",
+        "EXPO_PUBLIC_ADMOB_IOS_APP_ID": "ca-app-pub-7914769443576357~2670551476",
+        "EXPO_PUBLIC_ADMOB_IOS_BANNER": "ca-app-pub-7914769443576357/2638495956",
+        "EXPO_PUBLIC_ADMOB_IOS_INTERSTITIAL": "ca-app-pub-7914769443576357/7521377304",
+        "GOOGLE_MAP_API_KEY": "AIzaSyBOq3EO_1wKdV4nnULrkPo6V-t-QkuT4P0",
+        "GOOGLE_MAP_API_KEY_IOS": "AIzaSyCfQzt_oUOcgLamzpPSrGRILECUtN9GZ4Y",
+        "EXPO_PUBLIC_DEV_EMAIL": "umer@yopmail.com",
+        "EXPO_PUBLIC_DEV_PASSWORD": "User@1234"
+      }
+    },
+    "production": {
+      "autoIncrement": true,
+      "env": {
+        "EXPO_PUBLIC_API_URL": "https://main.d1s6ddufwl8qkb.amplifyapp.com",
+        "EXPO_PUBLIC_ADMOB_TEST_MODE": "false",
+        "EXPO_PUBLIC_ADMOB_ANDROID_APP_ID": "ca-app-pub-7914769443576357~5076957034",
+        "EXPO_PUBLIC_ADMOB_ANDROID_BANNER": "ca-app-pub-7914769443576357/5250437189",
+        "EXPO_PUBLIC_ADMOB_ANDROID_INTERSTITIAL": "ca-app-pub-7914769443576357/1119620487",
+        "EXPO_PUBLIC_ADMOB_IOS_APP_ID": "ca-app-pub-7914769443576357~2670551476",
+        "EXPO_PUBLIC_ADMOB_IOS_BANNER": "ca-app-pub-7914769443576357/2638495956",
+        "EXPO_PUBLIC_ADMOB_IOS_INTERSTITIAL": "ca-app-pub-7914769443576357/7521377304",
+        "GOOGLE_MAP_API_KEY": "AIzaSyBOq3EO_1wKdV4nnULrkPo6V-t-QkuT4P0",
+        "GOOGLE_MAP_API_KEY_IOS": "AIzaSyCfQzt_oUOcgLamzpPSrGRILECUtN9GZ4Y"
+      }
+    }
+  },
+  "submit": {
+    "production": {}
+  }
+}
